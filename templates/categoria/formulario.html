@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block titulo_conteudo %}  Formulário do Produto: {% endblock titulo_conteudo %}
+
+{% block conteudo %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_id">ID:</label>
+        <input type="number" name="id" id="id_id" class="form-control" value="{{ form.instance.id }}" {% if form.instance.id %}readonly{% endif %}><br>
+        {{ form.nome.label_tag }} {{ form.nome }} <br>
+        {{ form.ordem.label_tag }} {{ form.ordem }} <br>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'lista' %}'">Voltar</button>
+    </form>
+
+{% endblock conteudo %}

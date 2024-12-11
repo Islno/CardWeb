@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
 {% block titulo_conteudo %}
-
     Listagem de Categoria
-
 {% endblock titulo_conteudo %}
 
 {% block conteudo %}
-
-    <button type="button" class="btn btn-primary">Novo Produto</button> <br><br>
+    <button type="button" class="btn btn-primary" onclick="location.href='{% url 'form_categoria' %}'">Novo Produto</button>
+    <button type="button" class="btn btn-primary" onclick="location.reload();">Atualizar</button> <br><br>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
@@ -21,18 +19,24 @@
         <tbody>
             {% for categoria in lista %}
             <tr>
-                <td>{{categoria.id}}</td>
-                <td>{{categoria.nome}}</td>
-                <td>{{categoria.ordem}}</td>
+                <td>{{ categoria.id }}</td>
+                <td>{{ categoria.nome }}</td>
+                <td>{{ categoria.ordem }}</td>
                 <td>
-                    <button type="button" class="btn btn-info">Detalhes</button>
-                    <button type="button" class="btn btn-warning">Alterar</button>
-                    <button type="button" class="btn btn-danger">Excluir</button>
+                    <button type="button" class="btn btn-info" onclick="location.href='{% url 'detalhe_categoria' categoria.id %}'">Detalhes</button>
+                    <button type="button" class="btn btn-warning" onclick="location.href='{% url 'editar_categoria' categoria.id %}'">Alterar</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete({{ categoria.id }})">Excluir</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Você tem certeza que deseja excluir este item?")) {
+                location.href = "{% url 'delete_categoria' 0 %}".replace('0', id);
+            }
+        }
+    </script>
 {% endblock conteudo %}

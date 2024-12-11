@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block titulo_conteudo %} Detalhes do Produto: {% endblock %}
+
+{% block conteudo %}
+
+    {{ form.id.label_tag }} {{ form.id }} <br>
+    {{ form.nome.label_tag }} {{ form.nome }} <br>
+    {{ form.ordem.label_tag }} {{ form.ordem }} <br>
+
+    <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'lista' %}'">Voltar</button>
+
+{% endblock %}
