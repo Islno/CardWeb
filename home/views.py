@@ -73,7 +73,10 @@ def form_cliente(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Cliente cadastrado com sucesso!')
-            return redirect('index')
+            return redirect('form_cliente')
     else:
         form = ClienteForm()
-    return render(request, 'categoria/cliente.html', {'form': form})
+    
+    # Obter o último cliente cadastrado
+    ultimo_cliente = Cliente.objects.last()
+    return render(request, 'categoria/cliente.html', {'form': form, 'ultimo_cliente': ultimo_cliente})

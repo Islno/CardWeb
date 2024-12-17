@@ -34,3 +34,4 @@ class ClienteForm(forms.ModelForm):
         if len(nome) < 3:
             raise forms.ValidationError("O nome deve ter pelo menos 3 caracteres.")
         return nome
+    
