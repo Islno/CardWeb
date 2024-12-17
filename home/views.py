@@ -27,26 +27,37 @@ def form_categoria(request):
 def editar_categoria(request, id):
     try:
         categoria = Categoria.objects.get(pk=id)
-    except:
+    except Categoria.DoesNotExist:
         messages.error(request, 'Registro não encontrado')
         return redirect('lista')
 
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         form = CategoriaForm(request.POST, instance=categoria)
         if form.is_valid():
-            categoria = form.save()
-            lista=[]
-            lista.append(categoria)
-            return render(request, 'categoria/lista.html', {'lista':lista,})
-
+            form.save()
+            # Reorganizar as ordens para manter consistência
+            categorias = Categoria.objects.all().order_by('ordem')
+            for index, cat in enumerate(categorias, start=1):
+                cat.ordem = index
+                cat.save()
+            messages.success(request, 'Categoria atualizada com sucesso!')
+            return redirect('lista')
     else: 
         form = CategoriaForm(instance=categoria)
     
-    return render(request, 'categoria/formulario.html', {'form':form,})
+    return render(request, 'categoria/formulario.html', {'form': form})
 
 def delete_categoria(request, id):
     categoria = Categoria.objects.get(id=id)
     categoria.delete()
+
+    # Reorganizar os valores do campo 'ordem'
+    categorias = Categoria.objects.all().order_by('ordem')
+    for index, cat in enumerate(categorias, start=1):
+        cat.ordem = index
+        cat.save()
+
+    messages.success(request, 'Categoria deletada e ordem atualizada com sucesso!')
     return redirect('lista')
 
 def detalhe_categoria(request, id):
