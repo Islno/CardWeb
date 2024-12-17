@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Categoria
+from .models import Categoria, Cliente
 from django.contrib import messages
-from .forms import CategoriaForm
+from .forms import CategoriaForm, ClienteForm
 
 def index(request):
     return render(request, 'index.html')
@@ -66,3 +66,14 @@ def detalhe_categoria(request, id):
         'form': form,
     }
     return render(request, 'categoria/detail.html', contexto)
+
+def form_cliente(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente cadastrado com sucesso!')
+            return redirect('index')
+    else:
+        form = ClienteForm()
+    return render(request, 'categoria/cliente.html', {'form': form})
