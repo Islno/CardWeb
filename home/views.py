@@ -77,6 +77,6 @@ def form_cliente(request):
     else:
         form = ClienteForm()
     
-    # Obter o último cliente cadastrado
-    ultimo_cliente = Cliente.objects.last()
-    return render(request, 'categoria/cliente.html', {'form': form, 'ultimo_cliente': ultimo_cliente})
+    # Obter todos os clientes
+    clientes = Cliente.objects.all()
+    return render(request, 'categoria/cliente.html', {'form': form, 'clientes': clientes})

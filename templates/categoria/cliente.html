@@ -13,12 +13,14 @@
     </form>
     <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'index' %}'">Voltar</button>
 
-    {% if ultimo_cliente %}
+    {% if clientes %}
     <div class="mt-4">
-        <h2>Último Cliente Cadastrado</h2>
-        <p><strong>Nome:</strong> {{ ultimo_cliente.nome }}</p>
-        <p><strong>CPF:</strong> {{ ultimo_cliente.cpf }}</p>
-        <p><strong>Data de Nascimento:</strong> {{ ultimo_cliente.datanascimento }}</p>
+        <h2>Clientes Cadastrados</h2>
+        <ul>
+            {% for cliente in clientes %}
+            <li>{{ cliente.nome.split|first }}</li>
+            {% endfor %}
+        </ul>
     </div>
     {% else %}
     <div class="mt-4">
