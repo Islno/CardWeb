@@ -1,20 +1,16 @@
 <!-- templates/categoria/cliente.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulário de Cliente</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>Formulário de Cliente</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </form>
-        <a href="{% url 'index' %}" class="btn btn-secondary">Voltar</a>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block titulo_conteudo %} Formulário de Cliente {% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <h1>Formulário de Cliente</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+    <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'index' %}'">Voltar</button>
+</div>
+{% endblock %}
