@@ -23,7 +23,6 @@ def form_categoria(request):
         form = CategoriaForm()
     return render(request, 'categoria/formulario.html', {'form': form})
 
-
 def editar_categoria(request, id):
     try:
         categoria = Categoria.objects.get(pk=id)
