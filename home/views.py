@@ -17,11 +17,12 @@ def form_categoria(request):
         form = CategoriaForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success('operação cadastrada com sucesso!')
+            messages.success(request, 'Operação cadastrada com sucesso!')
             return redirect('lista')
     else: 
         form = CategoriaForm()
     return render(request, 'categoria/formulario.html', {'form': form})
+
 
 def editar_categoria(request, id):
     try:
