@@ -24,8 +24,9 @@ class ClienteForm(forms.ModelForm):
             raise forms.ValidationError("O nome deve ter pelo menos 3 caracteres.")
         return nome
 
-    def clean_ordem(self):
-        ordem = self.cleaned_data.get('ordem')
-        if ordem <= 0:
-            raise forms.ValidationError("O campo ordem tem que ser superior a 0.")
-        return ordem
+      # Remova ou comente a função clean_ordem se não for necessária
+    # def clean_ordem(self):
+    #     ordem = self.cleaned_data.get('ordem')
+    #     if ordem <= 0:
+    #         raise forms.ValidationError("O campo ordem tem que ser superior a 0.")
+    #     return ordem
