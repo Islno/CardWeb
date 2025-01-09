@@ -1,5 +1,7 @@
 from django import forms
 from .models import Categoria, Cliente
+from datetime import date
+
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -34,4 +36,9 @@ class ClienteForm(forms.ModelForm):
         if len(nome) < 3:
             raise forms.ValidationError("O nome deve ter pelo menos 3 caracteres.")
         return nome
+    def clean_datanasc(self):
+        datanasc = self.cleaned_data.get('datanasc')
+        if datanasc > date.today():
+            raise forms.ValidationError('A data de nascimento não pode ser maior que a data atual.')
+        return datanasc
     
