@@ -105,9 +105,27 @@ class EstoqueForm(forms.ModelForm):
                'produto': forms.HiddenInput(),
                'qtde': forms.TextInput(attrs={'class': 'inteiro form-control',}),
           }  
-
    
 
+class PedidoForm(forms.ModelForm):
+     class Meta:
+          model = Pedido
+          fields = ['cliente']
+          widgets = {
+               'cliente': forms.HiddenInput(),
+          }
+
+
+class ItemPedidoForm(forms.ModelForm):
+     class Meta:
+          model = ItemPedido
+          fields = ['pedido', 'produto', 'qtde']
+
+          widgets = {
+               'pedido': forms.HiddenInput(),
+               'produto': forms.HiddenInput(),
+               'qtde': forms.TextInput(attrs={'class': 'inteiro form-control',}),
+          }
      
      # def clean(self):
      #      cleaned_data = super().clean()
