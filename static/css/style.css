@@ -53,8 +53,6 @@ body {
     color: #fff;
 }
 
-
-
 .card-custom {
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -89,25 +87,31 @@ body {
 
 h5{
     margin: 5px;
-
 }
 
 
 .errorlist {
-    list-style-type: none; /* Remove os pontinhos */
-
- 
+    list-style-type: none; /* Remove os pontinhos */ 
 }
 
 .canvas {
-        display: block;
-        margin: 20px auto; /* Centraliza horizontalmente e adiciona margem superior */
-        border:1px solid #4e4c4cfa;
-        border-radius: 10px;
-        padding: 10px;
+    display: block;
+    margin: 20px auto; /* Centraliza horizontalmente e adiciona margem superior */
+    border:1px solid #4e4c4cfa;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .fieldset {
     border: 1px solid rgba(0, 0, 0, 0.2); /* Borda clarinha */
     font-size: 1rem;
   }
+.exibir_infor{
+    margin-bottom: 10.5rem; /* Ajuste o valor conforme necessário */
+    padding: 5px;
+}
+
+/* .style_list{
+    text-align: center; 
+    vertical-align: middle; 
+} */
