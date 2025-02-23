@@ -1,5 +1,7 @@
 import locale
 from django.db import models
+import hashlib
+from decimal import Decimal, ROUND_HALF_UP
 # from .forms import *
 
 # Modelo de validação de campos
@@ -66,7 +68,7 @@ class Pedido(models.Model):
     ]
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    produtos = models.ManyToManyField(Produto, through='ItemPedido')
+    produtos = models.ManyToManyField(Produto, through='itemPedido', related_name='pedidos')
     data_pedido = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=NOVO)
 
@@ -81,12 +83,12 @@ class Pedido(models.Model):
 
     @property 
     def total(self):
-        total = sum(item.qtde * item.preco for item in self.itempedido_set.all())
+        total = sum(item.qtde * item.preco for item in self.itens.all())
         return total
     
     @property
     def qtdeItens(self):
-        return self.itempedido_set.count()
+        return self.itens.count()
     
     @property
     def pagamentos(self):
@@ -101,9 +103,67 @@ class Pedido(models.Model):
     def debito(self):
         valor_debito = self.total - self.total_pago 
         return valor_debito
+    
+    @property
+    def data_pedido_key(self):
+        if self.data_pedido:
+            return self.data_pedido.strftime('%Y%m%d')
+        return None
+    
+    @property
+    def chave_acesso(self):
+        # Combina o ID do pedido e a data formatada
+        if self.id and self.data_pedido_key:
+            dados_comb = f"{self.id}{self.data_pedido_key}"
+        
+            # Cria o hash com sha256
+            sha256 = hashlib.sha256()
+            sha256.update(dados_comb.encode('utf-8'))  # Codificando a string para bytes
+            key_final = f"{self.data_pedido_key}{self.id}{sha256.hexdigest()}"
+            
+            # Remove caracteres não numéricos
+            key_final_numerico = ''.join(filter(str.isdigit, key_final))
+            return key_final_numerico  # Retorna a chave de acesso contendo apenas números
+        return None
+
+    @property
+    def calculoICMS(self):
+        icms = Decimal('0.18')
+        calculo = (self.total * icms).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        print(f"TOTAL: {self.total}")
+        return calculo
+    
+    @property
+    def calculoIPI(self):
+        ipi = Decimal('0.05')
+        calculo = (self.total * ipi).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return calculo
+    
+    @property
+    def calculoPIS(self):
+        pis = Decimal('0.0165')
+        calculo = (self.total * pis).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return calculo
+
+    @property
+    def calculoCONFINS(self):
+        confins = Decimal('0.076')
+        calculo = (self.total * confins).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return calculo
+    
+    @property
+    def total_impostos(self):
+        soma_impostos = (self.calculoICMS + self.calculoIPI + self.calculoPIS + self.calculoCONFINS).quantize(Decimal('0.010'), rounding=ROUND_HALF_UP)
+        return soma_impostos
+    
+    @property
+    def valor_final(self):
+        valor = (self.total + self.total_impostos).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return valor
+
 
 class ItemPedido(models.Model):
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)    
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name="itens")    
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)  
     qtde = models.PositiveIntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
@@ -113,7 +173,7 @@ class ItemPedido(models.Model):
     
     @property
     def calculoTotal(self):
-        total = self.qtde * self.preco
+        total = self.qtde * self.produto.preco
         return total
 
     @property
